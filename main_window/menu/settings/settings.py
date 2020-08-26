@@ -1,10 +1,9 @@
 from main_window.utils import PATH_IMAGE_BACK_NEDDLE
 
-from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QPushButton, QHBoxLayout
-from PyQt5.Qt import QIcon
-from PyQt5 import QtCore
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QKeySequence
+from PySide2.QtWidgets import QWidget, QLabel, QGridLayout, QPushButton, QHBoxLayout
+from PySide2 import QtCore
+from PySide2.QtCore import Qt
+from PySide2.QtGui import QKeySequence, QIcon
 import json
 
 
@@ -112,37 +111,37 @@ class Settings(QWidget):
         })
 
         dict_data.update({"rotate_left": {
-            self.VALUE: Qt.Key_Down,
+            self.VALUE: int(Qt.Key_Down),
             self.TRANSLATED: True
             }
         })
 
         dict_data.update({"rotate_right": {
-            self.VALUE: Qt.Key_Up,
+            self.VALUE: int(Qt.Key_Up),
             self.TRANSLATED: True
             }
         })
 
         dict_data.update({"move_left": {
-            self.VALUE: Qt.Key_Left,
+            self.VALUE: int(Qt.Key_Left),
             self.TRANSLATED: True
             }
         })
 
         dict_data.update({"move_right": {
-            self.VALUE: Qt.Key_Right,
+            self.VALUE: int(Qt.Key_Right),
             self.TRANSLATED: True
             }
         })
 
         dict_data.update({"down": {
-            self.VALUE: Qt.Key_Space,
+            self.VALUE: int(Qt.Key_Space),
             self.TRANSLATED: True
             }
         })
 
         dict_data.update({"game_pause": {
-            self.VALUE: Qt.Key_P,
+            self.VALUE: int(Qt.Key_P),
             self.TRANSLATED: True
             }
         })

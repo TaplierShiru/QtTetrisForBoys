@@ -1,9 +1,8 @@
 from main_window.utils import PATH_IMAGE_BACK_NEDDLE
 
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, QHBoxLayout
-from PyQt5.Qt import QIcon
-from PyQt5 import QtCore
-from PyQt5.QtGui import QFont
+from PySide2.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, QHBoxLayout
+from PySide2 import QtCore
+from PySide2.QtGui import QFont, QIcon
 
 
 class AboutGame(QWidget):

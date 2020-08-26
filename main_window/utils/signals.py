@@ -1,10 +1,10 @@
 from main_window.utils import MAIN_MENU_INDEX
-from PyQt5.QtCore import pyqtSignal, QObject
+from PySide2.QtCore import Signal, QObject
 
 
 class SignalControl(QObject):
 
-    sgn2stacked = pyqtSignal(int)
+    sgn2stacked = Signal(int)
 
     def back_to_menu(self):
         """

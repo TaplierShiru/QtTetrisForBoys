@@ -1,6 +1,6 @@
 from .control_widget import ControlWidget
 
-from PyQt5.QtWidgets import QMainWindow, QDesktopWidget
+from PySide2.QtWidgets import QMainWindow, QDesktopWidget
 
 
 class MainWindow(QMainWindow):
