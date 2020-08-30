@@ -1,7 +1,7 @@
 from .menu import MainMenu, Tetris, Settings, AboutGame
 from .utils import SignalControl, MAIN_MENU_INDEX
 
-from PyQt5.QtWidgets import QGridLayout, QWidget, QStackedWidget
+from PySide2.QtWidgets import QGridLayout, QWidget, QStackedWidget
 
 
 class ControlWidget(QWidget):

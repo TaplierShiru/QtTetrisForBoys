@@ -1,6 +1,9 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor, QPalette, QFont
-from PyQt5.QtWidgets import (QVBoxLayout, QLabel, QFrame,
+from main_window.utils import DanceText
+
+
+from PySide2.QtCore import Qt
+from PySide2.QtGui import QColor, QPalette, QFont
+from PySide2.QtWidgets import (QVBoxLayout, QLabel, QFrame,
                              QPushButton, QWidget,
                              QDesktopWidget, QApplication,
                              )
@@ -21,12 +24,18 @@ class MainMenu(QWidget):
         vbox = QVBoxLayout()
 
         # Label with name of the game (i.e. Tetris in our case)
+        # TODO: Do dynamic text with paintEvent and drawText from QPainter
+        """
         self._label_widget = QLabel("Tetris")
         self._label_widget.setFont(QFont('Times', 20, QFont.Bold))
-        self._label_widget.setMaximumHeight(50)
+        self._label_widget.setAlignment(Qt.AlignCenter)
+        """
+
+        self._label_widget = DanceText("Tetris", self)
+        #self._label_widget.setMaximumHeight(50)
         self._label_widget.setFrameStyle(QFrame.Panel)
         self._label_widget.setStyleSheet("background-color: rgb(200, 160, 160)")
-        self._label_widget.setAlignment(Qt.AlignCenter)
+
         vbox.addWidget(self._label_widget)
 
         # Create button and widget for game

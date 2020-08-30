@@ -2,9 +2,9 @@
 from main_window.utils import PATH_IMAGE_BACK_NEDDLE, PATH_IMAGE_RELOAD
 from .board import Board
 
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLCDNumber, QLabel
-from PyQt5 import QtCore
+from PySide2.QtGui import QIcon
+from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLCDNumber, QLabel
+from PySide2 import QtCore
 
 
 class Tetris(QWidget):

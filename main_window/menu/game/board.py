@@ -1,14 +1,14 @@
 from .shape import Shape
 from .tetrominoe import Tetrominoe
 
-from PyQt5.QtCore import Qt, QBasicTimer, pyqtSignal
-from PyQt5.QtGui import QPainter, QColor, QBrush
-from PyQt5.QtWidgets import QFrame
+from PySide2.QtCore import Qt, QBasicTimer, Signal
+from PySide2.QtGui import QPainter, QColor, QBrush
+from PySide2.QtWidgets import QFrame
 
 
 class Board(QFrame):
 
-    msg2StatusBar = pyqtSignal(str)
+    msg2StatusBar = Signal(str)
 
     BOARD_SPEED = 'board_speed'
     BOARD_SIZE = 'board_size'
