@@ -335,7 +335,7 @@ class Board(QFrame):
 
         """
 
-        color = Shape.COLOR_TABLE
+        color = self.curPiece.COLOR_TABLE
 
         color = QColor(color[shape])
         painter.fillRect(

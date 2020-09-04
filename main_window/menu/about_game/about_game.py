@@ -7,7 +7,7 @@ from PySide2.QtGui import QFont, QIcon
 
 class AboutGame(QWidget):
 
-    ABOUT_GAME = 3
+    ABOUT_GAME = 4
 
     def __init__(self, signal_controller):
         super().__init__()

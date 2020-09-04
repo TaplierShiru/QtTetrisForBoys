@@ -1,44 +1,31 @@
+from main_window.utils.constans import PATH_TO_FIGURES_DATA, COLOR, COORDS
 from .tetrominoe import Tetrominoe
 import random
-
+import json
 
 
 class Shape:
 
     # Different shapes of figures (see axis)
-    #              |
-    #    .(-1, 1)  |
-    #              |
-    #              |
-    #----.(-1, 0)--.(0, 0)------------------
-    #              |
-    #              |
-    #              .(0, -1)
-    #              |
-    TABLE_COORD = (
-        ((0, 0), (0, 0), (0, 0), (0, 0)),
-        ((0, -1), (0, 0), (-1, 0), (-1, 1)),
-        ((0, -1), (0, 0), (1, 0), (1, 1)),
-        ((0, -1), (0, 0), (0, 1), (0, 2)),
-        ((-1, 0), (0, 0), (1, 0), (0, 1)),
-        ((0, 0), (1, 0), (0, 1), (1, 1)),
-        ((-1, -1), (0, -1), (0, 0), (0, 1)),
-        ((1, -1), (0, -1), (0, 0), (0, 1))
-    )
-
-    COLOR_TABLE = [
-        0x000000, 
-        0xCC6666, 
-        0x66CC66, 
-        0x6666CC,
-        0xCCCC66, 
-        0xCC66CC, 
-        0x66CCCC, 
-        0xDAAA00       
-    ]
-
+    #                      |
+    #        .(-1, 1)      |
+    #                      |
+    #                      |
+    #--------.(-1, 0)------.(0, 0)------------------
+    #                      |
+    #                      |
+    #                      .(0, -1)
+    #                      |
 
     def __init__(self):
+
+        with open(PATH_TO_FIGURES_DATA) as fp:
+            data = fp.read()
+        data_js = json.loads(data)
+
+        self.COLOR_TABLE = [data_js[name][COLOR] for name in data_js]
+        self.TABLE_COORD = [data_js[name][COORDS] for name in data_js]
+        self.number_of_figures = len(self.COLOR_TABLE)
 
         self.coords = [[0, 0] for _ in range(4)]
         self.pieceShape = Tetrominoe.NoShape
@@ -59,7 +46,7 @@ class Shape:
 
         """
 
-        table = Shape.TABLE_COORD[new_shape]
+        table = self.TABLE_COORD[new_shape]
         for i in range(4):
             for j in range(2):
                 self.coords[i][j] = table[i][j]
@@ -70,7 +57,7 @@ class Shape:
         Set random shape
 
         """
-        self.set_shape(random.randint(1, 7))
+        self.set_shape(random.randint(1, self.number_of_figures))
     
     def get_x(self, index):
         """
@@ -159,7 +146,6 @@ class Shape:
             result.set_y(i, -self.get_x(i))
 
         return result
-        
     
     def rotate_right(self):
         """
@@ -177,5 +163,4 @@ class Shape:
             result.set_x(i, -self.get_y(i))
             result.set_y(i, self.get_x(i))
 
-        return result     
-    
+        return result

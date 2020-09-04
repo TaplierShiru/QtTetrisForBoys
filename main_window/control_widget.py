@@ -1,4 +1,4 @@
-from .menu import MainMenu, Tetris, Settings, AboutGame
+from .menu import MainMenu, Tetris, Settings, AboutGame, CustomFigureAdder
 from .utils import SignalControl, MAIN_MENU_INDEX
 
 from PySide2.QtWidgets import QGridLayout, QWidget, QStackedWidget
@@ -37,6 +37,11 @@ class ControlWidget(QWidget):
         self._settings_widget = Settings(self._signal_controller)
         self._settings_widget.SETTINGS = self._stacked_widget.addWidget(self._settings_widget)
         self._menu_widget.connect_setting_button(self._settings_widget.switcher)
+
+        # Create add new figure widget
+        self._add_new_figure_widget = CustomFigureAdder(self._signal_controller)
+        self._add_new_figure_widget.ABOUT_GAME = self._stacked_widget.addWidget(self._add_new_figure_widget)
+        self._menu_widget.connect_add_new_figure_button(self._add_new_figure_widget.switcher)
 
         # Create about game widget
         self._about_game_widget = AboutGame(self._signal_controller)
