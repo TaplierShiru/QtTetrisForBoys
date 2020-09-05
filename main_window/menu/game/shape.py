@@ -1,4 +1,4 @@
-from main_window.utils.constans import PATH_TO_FIGURES_DATA, COLOR, COORDS
+from main_window.utils.constans import PATH_TO_FIGURES_DATA, COLOR, COORDS, PATH_TO_DEFAULT_DATA
 from .tetrominoe import Tetrominoe
 import random
 import json
@@ -17,11 +17,38 @@ class Shape:
     #                      .(0, -1)
     #                      |
 
-    def __init__(self):
+    @staticmethod
+    def read_default_figure_data():
+        with open(PATH_TO_DEFAULT_DATA) as fp:
+            data = fp.read()
+        return json.loads(data)
 
+    @staticmethod
+    def read_figure_data():
         with open(PATH_TO_FIGURES_DATA) as fp:
             data = fp.read()
-        data_js = json.loads(data)
+        return json.loads(data)
+
+    @staticmethod
+    def write_figure_data(shape_list: list, color: str):
+        current_data = Shape.read_figure_data()
+        current_data.update({
+            str(len(current_data)): {
+                COLOR: color,
+                COORDS: shape_list
+            }
+        })
+
+        with open(PATH_TO_FIGURES_DATA, 'w') as fp:
+            json.dump(current_data, fp)
+
+    @staticmethod
+    def reset_shape_file_to_default():
+        with open(PATH_TO_FIGURES_DATA, 'w') as fp:
+            json.dump(Shape.read_default_figure_data(), fp)
+
+    def __init__(self):
+        data_js = self.read_figure_data()
 
         self.COLOR_TABLE = [data_js[name][COLOR] for name in data_js]
         self.TABLE_COORD = [data_js[name][COORDS] for name in data_js]

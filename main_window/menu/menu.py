@@ -47,8 +47,6 @@ class MainMenu(QWidget):
         self._settings_button.setPalette(pal)
         vbox.addWidget(self._settings_button)
 
-        # TODO: Possibility to add custom figures
-
         self._add_custom_figure_button = QPushButton("Add new figure")
         pal = self._add_custom_figure_button.palette()
         pal.setColor(QPalette.Button, QColor(Qt.green))

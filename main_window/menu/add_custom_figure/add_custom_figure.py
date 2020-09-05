@@ -2,15 +2,11 @@ from main_window.utils import PATH_IMAGE_BACK_NEDDLE
 from .draw_block import DrawBlockFrame
 from .pressed_frame_controler import PressedFrameControled
 
-import random
-
 from PySide2.QtWidgets import (QWidget, QGridLayout, QVBoxLayout,
-                               QHBoxLayout, QPushButton, QLabel,
-                               QSizePolicy, QFrame)
-from PySide2 import QtGui
+                               QHBoxLayout, QPushButton, QLabel
+                               )
 from PySide2 import QtCore
-from PySide2.QtCore import Qt, QTimer
-from PySide2.QtGui import QPainter, QPen, QFont, QTransform, QColor, QIcon
+from PySide2.QtGui import QIcon
 
 
 class CustomFigureAdder(QWidget):
@@ -53,7 +49,9 @@ class CustomFigureAdder(QWidget):
 
         # Create button to save figure
         self._save_figure_button = QPushButton('save')
+        self._save_figure_button.clicked.connect(self.save_figure_shape)
         hbox.addWidget(self._save_figure_button, 2, QtCore.Qt.AlignRight | QtCore.Qt.AlignTop)
+
 
         vbox.addLayout(hbox, 0)
 
@@ -61,7 +59,6 @@ class CustomFigureAdder(QWidget):
         self._sheet = []
         self._choose_figure = []
         self._proposed_figures = []
-        self._number_of_pressed_frames = 0
 
         for i in range(self.MAX_X):
             row = []
@@ -84,6 +81,11 @@ class CustomFigureAdder(QWidget):
         """
         self.signal_controller.sgn2stacked.emit(int(self.ADD_NEW_FIGURE))
 
+    def save_figure_shape(self):
+        if len(self._choose_figure) == self.MAXIMUM_SIZE:
+            print('save')
+            pass
+
     def __propose_direction(self, to_coordinates):
         propose_move_p = self.__check_figure_propose_move(
             to_coordinates[0], to_coordinates[1]
@@ -95,19 +97,23 @@ class CustomFigureAdder(QWidget):
 
     def __check_figure_propose_move(self, to_x, to_y):
         return self.__check_figure_position(to_x, to_y) and \
-               not self._sheet[to_y][to_x]._is_pressed
+               not self._sheet[to_y][to_x].is_pressed()
 
     def __check_figure_position(self, x, y):
+        """
+        Check whatever x and y is in bounds of the drawing coordinate
+
+        """
         return 0 <= x < self.MAX_X and 0 <= y < self.MAX_Y
 
     def take_clicked_frame(self, coordinates):
 
-        if len(self._proposed_figures) > 1 and not self._sheet[coordinates[1]][coordinates[0]]._is_proposed:
+        if len(self._proposed_figures) > 0 and not self._sheet[coordinates[1]][coordinates[0]].is_proposed():
             print('bad direction!')
             return
 
         # Draw proposed direction (where can move user)
-        if self._number_of_pressed_frames != 0:
+        if len(self._choose_figure) != 0:
             self._proposed_figures.append([])
             # Top direction
             propose_move = [coordinates[0], coordinates[1] - 1]
@@ -125,7 +131,7 @@ class CustomFigureAdder(QWidget):
             propose_move = [coordinates[0] + 1, coordinates[1]]
             self.__propose_direction(propose_move)
 
-        if self._number_of_pressed_frames > self.MAXIMUM_SIZE:
+        if len(self._choose_figure) >= self.MAXIMUM_SIZE:
             coord_del_figure = self._choose_figure.pop(0)
             self._sheet[coord_del_figure[1]][coord_del_figure[0]].default_color()
             self._sheet[coord_del_figure[1]][coord_del_figure[0]].reset_statement()
@@ -135,8 +141,8 @@ class CustomFigureAdder(QWidget):
             for single_prop in self._proposed_figures[0]:
                 self._sheet[single_prop[-1]][single_prop[0]].default_color()
                 self._sheet[single_prop[-1]][single_prop[0]].reset_statement()
+            self._proposed_figures.pop(0)
 
-        self._number_of_pressed_frames += 1
         self._choose_figure.append(coordinates[:2])
         self._sheet[coordinates[1]][coordinates[0]].pressed_color()
         print('x: ', coordinates[0], 'y: ', coordinates[1])
