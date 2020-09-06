@@ -1,4 +1,5 @@
 from main_window.utils import PATH_IMAGE_BACK_NEDDLE
+from ..game.shape import Shape
 from .draw_block import DrawBlockFrame
 from .pressed_frame_controler import PressedFrameControled
 
@@ -12,9 +13,12 @@ from PySide2.QtGui import QIcon
 class CustomFigureAdder(QWidget):
 
     ADD_NEW_FIGURE = 3
-    MAX_X = 6
-    MAX_Y = 6
+    MAX_X = 7
+    MAX_Y = 7
     MAXIMUM_SIZE = 4
+
+    SHIFT_X = 3
+    SHIFT_Y = 3
 
     def __init__(self, signal_controller):
         super().__init__()
@@ -59,11 +63,15 @@ class CustomFigureAdder(QWidget):
         self._sheet = []
         self._choose_figure = []
         self._proposed_figures = []
+        self._saved_color = 'black'
 
         for i in range(self.MAX_X):
             row = []
             for j in range(self.MAX_Y):
                 single = DrawBlockFrame(self.signal_pressed_frames, j, i)
+                if i == 3 and j == 3:
+                    single.COLOR_DEFAULT = 'blue'
+                    single.default_color()
                 row.append(single)
                 grid.addWidget(single, i, j)
 
@@ -84,7 +92,11 @@ class CustomFigureAdder(QWidget):
     def save_figure_shape(self):
         if len(self._choose_figure) == self.MAXIMUM_SIZE:
             print('save')
-            pass
+            saved_figure = [
+                [single[0] - self.SHIFT_X, single[1] - self.SHIFT_Y]
+                for single in self._choose_figure
+            ]
+            Shape.write_figure_data(saved_figure, self._saved_color)
 
     def __propose_direction(self, to_coordinates):
         propose_move_p = self.__check_figure_propose_move(

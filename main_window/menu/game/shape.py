@@ -52,7 +52,7 @@ class Shape:
 
         self.COLOR_TABLE = [data_js[name][COLOR] for name in data_js]
         self.TABLE_COORD = [data_js[name][COORDS] for name in data_js]
-        self.number_of_figures = len(self.COLOR_TABLE)
+        self.number_of_figures = len(self.TABLE_COORD) - 1
 
         self.coords = [[0, 0] for _ in range(4)]
         self.pieceShape = Tetrominoe.NoShape
@@ -72,10 +72,9 @@ class Shape:
         Set shape
 
         """
-
         table = self.TABLE_COORD[new_shape]
-        for i in range(4):
-            for j in range(2):
+        for i in range(len(table)):
+            for j in range(len(table[i])):
                 self.coords[i][j] = table[i][j]
         self.pieceShape = new_shape
     
