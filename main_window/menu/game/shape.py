@@ -2,6 +2,7 @@ from main_window.utils.constans import PATH_TO_FIGURES_DATA, COLOR, COORDS, PATH
 from .tetrominoe import Tetrominoe
 import random
 import json
+import copy
 
 
 class Shape:
@@ -54,7 +55,8 @@ class Shape:
         self.TABLE_COORD = [data_js[name][COORDS] for name in data_js]
         self.number_of_figures = len(self.TABLE_COORD) - 1
 
-        self.coords = [[0, 0] for _ in range(4)]
+        self.coords = None
+        self.length = 0
         self.pieceShape = Tetrominoe.NoShape
 
         self.set_shape(Tetrominoe.NoShape)
@@ -73,9 +75,11 @@ class Shape:
 
         """
         table = self.TABLE_COORD[new_shape]
-        for i in range(len(table)):
-            for j in range(len(table[i])):
-                self.coords[i][j] = table[i][j]
+        # add custom size
+
+        self.coords = copy.deepcopy(table)
+        self.length = len(self.coords)
+
         self.pieceShape = new_shape
     
     def set_random_shape(self):
@@ -165,10 +169,10 @@ class Shape:
             return self
 
         result = Shape()
-        result.pieceShape = self.pieceShape
+        result.set_shape(self.pieceShape)
 
-        for i in range(4):
-            result.set_x(i, self.get_y(i))
+        for i in range(result.length):
+            result.set_x(i,  self.get_y(i))
             result.set_y(i, -self.get_x(i))
 
         return result
@@ -183,10 +187,10 @@ class Shape:
             return self
 
         result = Shape()
-        result.pieceShape = self.pieceShape
+        result.set_shape(self.pieceShape)
 
-        for i in range(4):
+        for i in range(result.length):
             result.set_x(i, -self.get_y(i))
-            result.set_y(i, self.get_x(i))
+            result.set_y(i,  self.get_x(i))
 
         return result

@@ -137,7 +137,7 @@ class Board(QFrame):
         
         if self.curPiece.get_shape() != Tetrominoe.NoShape:
 
-            for i in range(4):
+            for i in range(self.curPiece.length):
                 x = self.curX + self.curPiece.get_x(i)
                 y = self.curY - self.curPiece.get_y(i)
                 self.drawSquare(
@@ -239,7 +239,7 @@ class Board(QFrame):
 
         """
 
-        for i in range(4):
+        for i in range(self.curPiece.length):
 
             x = self.curX + self.curPiece.get_x(i)
             y = self.curY - self.curPiece.get_y(i)
@@ -310,7 +310,7 @@ class Board(QFrame):
 
         """
 
-        for i in range(4):
+        for i in range(newPiece.length):
 
             x = newX + newPiece.get_x(i)
             y = newY - newPiece.get_y(i)
@@ -387,8 +387,3 @@ class Board(QFrame):
             0, rect.height() - 1,
             0, 0
         )
-        
-
-
-
-        

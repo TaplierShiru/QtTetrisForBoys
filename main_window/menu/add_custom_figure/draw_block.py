@@ -52,7 +52,7 @@ class DrawBlockFrame(QFrame):
                            'border: 1px solid;\n' + \
                            'padding: 10px; }')
 
-    def propose_direction(self):
+    def propose_color(self):
         """
         Set propose color and set block into propose statement
 
@@ -95,7 +95,7 @@ class DrawBlockFrame(QFrame):
         Event which control enter of the mouse into this widget
 
         """
-        if not self._is_pressed and not self._is_proposed:
+        if not self._is_pressed:
             self.setStyleSheet('QFrame { background-color: %s }' % self.COLOR_LOOK_AT)
 
     def leaveEvent(self, event: QtCore.QEvent):
@@ -103,7 +103,9 @@ class DrawBlockFrame(QFrame):
         Event which control leave of the mouse from this widget
 
         """
-        if not self._is_pressed and not self._is_proposed:
+        if self._is_proposed:
+            self.propose_color()
+        elif not self._is_pressed:
             self.default_color()
 
     def mousePressEvent(self, event: QtGui.QMouseEvent):

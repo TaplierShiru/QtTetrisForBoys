@@ -15,7 +15,7 @@ class CustomFigureAdder(QWidget):
     ADD_NEW_FIGURE = 3
     MAX_X = 7
     MAX_Y = 7
-    MAXIMUM_SIZE = 4
+    MAXIMUM_SIZE = 5
 
     SHIFT_X = 3
     SHIFT_Y = 3
@@ -56,7 +56,6 @@ class CustomFigureAdder(QWidget):
         self._save_figure_button.clicked.connect(self.save_figure_shape)
         hbox.addWidget(self._save_figure_button, 2, QtCore.Qt.AlignRight | QtCore.Qt.AlignTop)
 
-
         vbox.addLayout(hbox, 0)
 
         grid = QGridLayout()
@@ -72,6 +71,7 @@ class CustomFigureAdder(QWidget):
                 if i == 3 and j == 3:
                     single.COLOR_DEFAULT = 'blue'
                     single.default_color()
+                    self.center_sheet = single
                 row.append(single)
                 grid.addWidget(single, i, j)
 
@@ -90,7 +90,7 @@ class CustomFigureAdder(QWidget):
         self.signal_controller.sgn2stacked.emit(int(self.ADD_NEW_FIGURE))
 
     def save_figure_shape(self):
-        if len(self._choose_figure) == self.MAXIMUM_SIZE:
+        if len(self._choose_figure) == self.MAXIMUM_SIZE and self.center_sheet.is_pressed():
             print('save')
             saved_figure = [
                 [single[0] - self.SHIFT_X, single[1] - self.SHIFT_Y]
@@ -105,7 +105,7 @@ class CustomFigureAdder(QWidget):
         print('Propose direction: x: ', to_coordinates[0],' y: ', to_coordinates[1], ' is good: ', propose_move_p)
         if propose_move_p:
             self._proposed_figures[-1].append(to_coordinates)
-            self._sheet[to_coordinates[1]][to_coordinates[0]].propose_direction()
+            self._sheet[to_coordinates[1]][to_coordinates[0]].propose_color()
 
     def __check_figure_propose_move(self, to_x, to_y):
         return self.__check_figure_position(to_x, to_y) and \
