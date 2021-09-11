@@ -1,8 +1,8 @@
-from main_window.utils import PATH_IMAGE_BACK_NEDDLE
+from tetris_fb.main_window.utils import PATH_IMAGE_BACK_NEDDLE
 
-from PySide2.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, QHBoxLayout
-from PySide2 import QtCore
-from PySide2.QtGui import QFont, QIcon
+from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, QHBoxLayout
+from PySide6 import QtCore
+from PySide6.QtGui import QFont, QIcon
 
 
 class AboutGame(QWidget):

@@ -1,13 +1,13 @@
-from main_window.utils import PATH_IMAGE_BACK_NEDDLE
+from tetris_fb.main_window.utils import PATH_IMAGE_BACK_NEDDLE
 from ..game.shape import Shape
 from .draw_block import DrawBlockFrame
 from .pressed_frame_controler import PressedFrameControled
 
-from PySide2.QtWidgets import (QWidget, QGridLayout, QVBoxLayout,
+from PySide6.QtWidgets import (QWidget, QGridLayout, QVBoxLayout,
                                QHBoxLayout, QPushButton, QLabel
                                )
-from PySide2 import QtCore
-from PySide2.QtGui import QIcon
+from PySide6 import QtCore
+from PySide6.QtGui import QIcon
 
 
 class CustomFigureAdder(QWidget):

@@ -1,8 +1,8 @@
 from .pressed_frame_controler import PressedFrameControled
 
-from PySide2.QtWidgets import QFrame
-from PySide2 import QtGui
-from PySide2 import QtCore
+from PySide6.QtWidgets import QFrame
+from PySide6 import QtGui
+from PySide6 import QtCore
 
 
 class DrawBlockFrame(QFrame):

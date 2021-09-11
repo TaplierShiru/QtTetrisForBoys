@@ -1,7 +1,7 @@
 
-from main_window import MainWindow
+from tetris_fb.main_window import MainWindow
 
-from PySide2.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication
 import sys
 
 
@@ -9,7 +9,7 @@ def main():
 
     app = QApplication([])
     _ = MainWindow()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

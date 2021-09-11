@@ -1,9 +1,9 @@
 import random
 
-from PySide2.QtWidgets import QFrame
-from PySide2 import QtGui
-from PySide2.QtCore import Qt, QTimer
-from PySide2.QtGui import QPainter, QPen, QFont, QTransform, QColor
+from PySide6.QtWidgets import QFrame
+from PySide6 import QtGui
+from PySide6.QtCore import Qt, QTimer
+from PySide6.QtGui import QPainter, QPen, QFont, QTransform, QColor
 
 
 class DanceText(QFrame):

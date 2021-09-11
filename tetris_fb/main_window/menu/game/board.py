@@ -1,9 +1,9 @@
 from .shape import Shape
 from .tetrominoe import Tetrominoe
 
-from PySide2.QtCore import Qt, QBasicTimer, Signal
-from PySide2.QtGui import QPainter, QColor, QBrush
-from PySide2.QtWidgets import QFrame
+from PySide6.QtCore import Qt, QBasicTimer, Signal
+from PySide6.QtGui import QPainter, QColor, QBrush
+from PySide6.QtWidgets import QFrame
 
 
 class Board(QFrame):

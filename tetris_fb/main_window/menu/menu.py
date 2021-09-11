@@ -1,12 +1,10 @@
-from main_window.utils import DanceText
+from tetris_fb.main_window.utils import DanceText
 
 
-from PySide2.QtCore import Qt
-from PySide2.QtGui import QColor, QPalette, QFont
-from PySide2.QtWidgets import (QVBoxLayout, QLabel, QFrame,
-                             QPushButton, QWidget,
-                             QDesktopWidget, QApplication,
-                             )
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QColor, QPalette, QFont
+from PySide6.QtWidgets import (QVBoxLayout, QLabel, QFrame,
+                               QPushButton, QWidget, QApplication)
 
 
 class MainMenu(QWidget):
