@@ -1,5 +1,5 @@
-from main_window.utils import MAIN_MENU_INDEX
-from PySide2.QtCore import Signal, QObject
+from tetris_fb.main_window.utils import MAIN_MENU_INDEX
+from PySide6.QtCore import Signal, QObject
 
 
 class SignalControl(QObject):

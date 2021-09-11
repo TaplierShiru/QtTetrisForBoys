@@ -1,6 +1,6 @@
 from .control_widget import ControlWidget
 
-from PySide2.QtWidgets import QMainWindow, QDesktopWidget
+from PySide6.QtWidgets import QMainWindow
 
 
 class MainWindow(QMainWindow):
@@ -34,8 +34,7 @@ class MainWindow(QMainWindow):
         Centers the window on the screen
 
         """
-
-        screen = QDesktopWidget().screenGeometry()
+        screen = self.screen().geometry()
         size = self.geometry()
         self.move(
             int( (screen.width() - size.width()) / 2),
