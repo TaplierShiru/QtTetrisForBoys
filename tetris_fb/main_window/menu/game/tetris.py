@@ -1,10 +1,10 @@
 
-from main_window.utils import PATH_IMAGE_BACK_NEDDLE, PATH_IMAGE_RELOAD
+from tetris_fb.main_window.utils import PATH_IMAGE_BACK_NEDDLE, PATH_IMAGE_RELOAD
 from .board import Board
 
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLCDNumber, QLabel
-from PySide2 import QtCore
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLCDNumber, QLabel
+from PySide6 import QtCore
 
 
 class Tetris(QWidget):
