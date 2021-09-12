@@ -1,3 +1,3 @@
 
-from .about_game import AboutGame
+from .about_game_view import AboutGameView
 

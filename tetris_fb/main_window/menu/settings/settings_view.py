@@ -7,7 +7,7 @@ from PySide6.QtGui import QKeySequence, QIcon
 import json
 
 
-class Settings(QWidget):
+class SettingsView(QWidget):
 
     SETTINGS = 2
     TRANSLATED = 'translated'
@@ -31,10 +31,10 @@ class Settings(QWidget):
         hbox.addSpacing(2)
 
         self._button_back = QPushButton(QIcon(PATH_IMAGE_BACK_NEDDLE), "", self)
-        self._button_back.clicked.connect(self.signal_controller.back_to_menu)
+        self._button_back.clicked.connect(self.signal_controller.back2menu)
         hbox.addWidget(self._button_back, 0, QtCore.Qt.AlignLeft)
 
-        self.label = QLabel("Settings")
+        self.label = QLabel("SettingsView")
         hbox.addWidget(self.label, 1, QtCore.Qt.AlignCenter)
 
         grid.addLayout(hbox, 0, 0, QtCore.Qt.AlignTop)

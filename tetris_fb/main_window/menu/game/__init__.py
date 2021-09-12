@@ -1,3 +1,3 @@
 
-from .tetris import Tetris
+from .tetris_view import TetrisView
 

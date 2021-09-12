@@ -1,5 +1,5 @@
 from .shape import Shape
-from .tetrominoe import Tetrominoe
+from .tetris_figures_enum import TetrisFiguresEnum
 
 from PySide6.QtCore import Qt, QBasicTimer, Signal
 from PySide6.QtGui import QPainter, QColor, QBrush
@@ -128,14 +128,14 @@ class Board(QFrame):
             for j in range(self._board_width):
                 shape = self.shapeAt(j, self._board_height - i - 1)
 
-                if shape != Tetrominoe.NoShape:
+                if shape != TetrisFiguresEnum.NoShape:
                     self.drawSquare(
                         painter, rect.left() + j * self.get_square_width(),
                         boardTop + i * self.get_square_height(),
                         shape
                     )
         
-        if self.curPiece.get_shape() != Tetrominoe.NoShape:
+        if self.curPiece.get_shape() != TetrisFiguresEnum.NoShape:
 
             for i in range(self.curPiece.length):
                 x = self.curX + self.curPiece.get_x(i)
@@ -155,7 +155,7 @@ class Board(QFrame):
 
         """
 
-        if not self.isStarted or self.curPiece.get_shape() == Tetrominoe.NoShape:
+        if not self.isStarted or self.curPiece.get_shape() == TetrisFiguresEnum.NoShape:
             super(Board, self).keyPressEvent(event)
             return
         
@@ -204,7 +204,7 @@ class Board(QFrame):
         """
         self.board.clear()
         for _ in range(self._board_height * self._board_width):
-            self.board.append(Tetrominoe.NoShape)
+            self.board.append(TetrisFiguresEnum.NoShape)
         
     def dropDown(self):
         """
@@ -263,7 +263,7 @@ class Board(QFrame):
             n = 0
 
             for j in range(self._board_width):
-                if not self.shapeAt(j, i) == Tetrominoe.NoShape:
+                if not self.shapeAt(j, i) == TetrisFiguresEnum.NoShape:
                     n += 1
             
             if n == 10:
@@ -284,7 +284,7 @@ class Board(QFrame):
             self.msg2StatusBar.emit(str(self.numLinesRemoved))
 
             self.isWaitingAfterLine = True
-            self.curPiece.set_shape(Tetrominoe.NoShape)
+            self.curPiece.set_shape(TetrisFiguresEnum.NoShape)
             self.update()
     
     def newPiece(self):
@@ -299,7 +299,7 @@ class Board(QFrame):
         self.curY = self._board_height - 1 + self.curPiece.min_y()
 
         if not self.tryMove(self.curPiece, self.curX, self.curY):
-            self.curPiece.set_shape(Tetrominoe.NoShape)
+            self.curPiece.set_shape(TetrisFiguresEnum.NoShape)
             self.timer.stop()
             self.isStarted = False
             self.msg2StatusBar.emit("Game over!")
@@ -318,7 +318,7 @@ class Board(QFrame):
             if x < 0 or x >= self._board_width or y < 0 or y >= self._board_height:
                 return False
             
-            if self.shapeAt(x, y) != Tetrominoe.NoShape:
+            if self.shapeAt(x, y) != TetrisFiguresEnum.NoShape:
                 return False
         
         self.curPiece = newPiece

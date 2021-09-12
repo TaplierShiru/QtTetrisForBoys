@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QL
 from PySide6 import QtCore
 
 
-class Tetris(QWidget):
+class TetrisView(QWidget):
 
     GAME = 1
 
@@ -28,7 +28,7 @@ class Tetris(QWidget):
 
         # Create button "back to the menu"
         self._button_back = QPushButton(QIcon(PATH_IMAGE_BACK_NEDDLE), "", self)
-        self._button_back.clicked.connect(self.signal_controller.back_to_menu)
+        self._button_back.clicked.connect(self.signal_controller.back2menu)
         self._button_back.setFixedSize(60, 30)
         vbox.addWidget(self._button_back, 0, QtCore.Qt.AlignTop)
 
@@ -53,7 +53,7 @@ class Tetris(QWidget):
         hbox.addWidget(self.tboard, 1)
 
         self.setLayout(hbox)
-        self.setWindowTitle("Tetris")
+        self.setWindowTitle("TetrisView")
 
         self.tboard.msg2StatusBar[str].connect(self._score.display)
 

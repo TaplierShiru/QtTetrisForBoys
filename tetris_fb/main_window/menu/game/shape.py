@@ -1,5 +1,5 @@
 from main_window.utils.constans import PATH_TO_FIGURES_DATA, COLOR, COORDS, PATH_TO_DEFAULT_DATA
-from .tetrominoe import Tetrominoe
+from .tetris_figures_enum import TetrisFiguresEnum
 import random
 import json
 import copy
@@ -57,9 +57,9 @@ class Shape:
 
         self.coords = None
         self.length = 0
-        self.pieceShape = Tetrominoe.NoShape
+        self.pieceShape = TetrisFiguresEnum.NoShape
 
-        self.set_shape(Tetrominoe.NoShape)
+        self.set_shape(TetrisFiguresEnum.NoShape)
     
     def get_shape(self):
         """
@@ -165,7 +165,7 @@ class Shape:
 
         """
 
-        if self.pieceShape == Tetrominoe.SquareShape:
+        if self.pieceShape == TetrisFiguresEnum.SquareShape:
             return self
 
         result = Shape()
@@ -183,7 +183,7 @@ class Shape:
 
         """
 
-        if self.pieceShape == Tetrominoe.SquareShape:
+        if self.pieceShape == TetrisFiguresEnum.SquareShape:
             return self
 
         result = Shape()

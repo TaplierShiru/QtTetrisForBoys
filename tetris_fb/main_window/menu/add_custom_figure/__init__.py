@@ -1,2 +1,2 @@
 
-from .add_custom_figure import CustomFigureAdder
+from .add_custom_figure_view import CustomFigureAdderView

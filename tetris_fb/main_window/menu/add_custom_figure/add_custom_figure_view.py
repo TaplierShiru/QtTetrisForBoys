@@ -1,6 +1,6 @@
 from tetris_fb.main_window.utils import PATH_IMAGE_BACK_NEDDLE
 from ..game.shape import Shape
-from .draw_block import DrawBlockFrame
+from .draw_block import DrawBlockQFrame
 from .pressed_frame_controler import PressedFrameControled
 
 from PySide6.QtWidgets import (QWidget, QGridLayout, QVBoxLayout,
@@ -10,7 +10,7 @@ from PySide6 import QtCore
 from PySide6.QtGui import QIcon
 
 
-class CustomFigureAdder(QWidget):
+class CustomFigureAdderView(QWidget):
 
     ADD_NEW_FIGURE = 3
     MAX_X = 7
@@ -44,7 +44,7 @@ class CustomFigureAdder(QWidget):
 
         # Create button which returns to the menu
         self._button_back = QPushButton(QIcon(PATH_IMAGE_BACK_NEDDLE), "", self)
-        self._button_back.clicked.connect(self.signal_controller.back_to_menu)
+        self._button_back.clicked.connect(self.signal_controller.back2menu)
         hbox.addWidget(self._button_back, 0, QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
 
         # Header of this widget
@@ -67,7 +67,7 @@ class CustomFigureAdder(QWidget):
         for i in range(self.MAX_X):
             row = []
             for j in range(self.MAX_Y):
-                single = DrawBlockFrame(self.signal_pressed_frames, j, i)
+                single = DrawBlockQFrame(self.signal_pressed_frames, j, i)
                 if i == 3 and j == 3:
                     single.COLOR_DEFAULT = 'blue'
                     single.default_color()

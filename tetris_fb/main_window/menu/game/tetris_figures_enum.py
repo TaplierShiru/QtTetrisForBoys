@@ -1,6 +1,6 @@
 
 
-class Tetrominoe:
+class TetrisFiguresEnum:
     """
     Enum for different shapes
 

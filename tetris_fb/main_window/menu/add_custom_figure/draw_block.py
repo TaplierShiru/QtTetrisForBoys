@@ -5,7 +5,7 @@ from PySide6 import QtGui
 from PySide6 import QtCore
 
 
-class DrawBlockFrame(QFrame):
+class DrawBlockQFrame(QFrame):
     COLOR_DEFAULT = '#F8F8FF'
     COLOR_PRESSED = '#708090'
     COLOR_PROPOSE = '#90EE90'
@@ -18,7 +18,7 @@ class DrawBlockFrame(QFrame):
         Parameters
         ----------
         signal_sender_pressed : PressedFrameControled
-            Controller for emit signals to CustomFigureAdder widget
+            Controller for emit signals to CustomFigureAdderView widget
         x : int
             Coordinate on X axis for this block
         y : int

@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (QVBoxLayout, QLabel, QFrame,
                                QPushButton, QWidget, QApplication)
 
 
-class MainMenu(QWidget):
+class MainMenuView(QWidget):
 
     def __init__(self):
         super().__init__()
@@ -21,7 +21,7 @@ class MainMenu(QWidget):
         """
         vbox = QVBoxLayout()
 
-        # Label with name of the game (i.e. Tetris in our case)
+        # Label with name of the game (i.e. TetrisView in our case)
         self._label_widget = DanceText("Tetris", self)
         #self._label_widget.setMaximumHeight(50)
         self._label_widget.setFrameStyle(QFrame.Panel)
