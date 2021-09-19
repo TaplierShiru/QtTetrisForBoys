@@ -13,12 +13,13 @@ class SettingsView(QWidget):
     TRANSLATED = 'translated'
     VALUE = 'value'
     SETTINGS_PATH = 'main_window/menu/settings/game_settings.json'
+    DEFAULT_SETTINGS_PATH = 'main_window/menu/settings/default_game_settings.json'
 
-    def __init__(self, signal_controller):
+    def __init__(self, signalController):
         super().__init__()
-        self.signal_controller = signal_controller
+        self.signalController = signalController
 
-        self.__create_default_settings()
+        self.__create_default_settings(self.DEFAULT_SETTINGS_PATH)
         self.initUI()
     
     def initUI(self):
@@ -30,36 +31,36 @@ class SettingsView(QWidget):
         hbox = QHBoxLayout()
         hbox.addSpacing(2)
 
-        self._button_back = QPushButton(QIcon(PATH_IMAGE_BACK_NEDDLE), "", self)
-        self._button_back.clicked.connect(self.signal_controller.back2menu)
-        hbox.addWidget(self._button_back, 0, QtCore.Qt.AlignLeft)
+        self._buttonBack = QPushButton(QIcon(PATH_IMAGE_BACK_NEDDLE), "", self)
+        self._buttonBack.clicked.connect(self.signalController.back2menu)
+        hbox.addWidget(self._buttonBack, 0, QtCore.Qt.AlignLeft)
 
         self.label = QLabel("SettingsView")
         hbox.addWidget(self.label, 1, QtCore.Qt.AlignCenter)
 
         grid.addLayout(hbox, 0, 0, QtCore.Qt.AlignTop)
 
-        json_data_settings = self.get_settings(None)
+        jsonDataSettings = self.get_settings(None)
 
         # TODO: Possibility to change settings via this widget
         #self._labels_settings = []
 
         counter = 1
 
-        for name in json_data_settings:
-            single = json_data_settings[name]
+        for name in jsonDataSettings:
+            single = jsonDataSettings[name]
 
             translated = single[self.TRANSLATED]
             value = single[self.VALUE]
 
-            new_label = QLabel(name.replace('_', ' '))
+            newLabel = QLabel(name.replace('_', ' '))
             if translated:
-                second_label = QLabel(QKeySequence(value).toString())
+                secondLabel = QLabel(QKeySequence(value).toString())
             else:
-                second_label = QLabel(str(value))
+                secondLabel = QLabel(str(value))
 
-            grid.addWidget(new_label, counter, 0, QtCore.Qt.AlignLeft)
-            grid.addWidget(second_label, counter, 1, QtCore.Qt.AlignRight)
+            grid.addWidget(newLabel, counter, 0, QtCore.Qt.AlignLeft)
+            grid.addWidget(secondLabel, counter, 1, QtCore.Qt.AlignRight)
 
             counter += 1
 
@@ -71,7 +72,7 @@ class SettingsView(QWidget):
         Emit signal that menu should be switched to SETTINGS widget
 
         """
-        self.signal_controller.sgn2stacked.emit(int(self.SETTINGS))
+        self.signalController.sgn2stacked.emit(int(self.SETTINGS))
 
     def get_settings(self, key):
         """
@@ -86,7 +87,7 @@ class SettingsView(QWidget):
 
         return data[key][self.VALUE]
 
-    def __create_default_settings(self):
+    def __create_default_settings(self, pathSave: str):
         """
         Create default settings
 
@@ -146,6 +147,6 @@ class SettingsView(QWidget):
             }
         })
 
-        with open(self.SETTINGS_PATH, 'w') as rf:
+        with open(pathSave, 'w') as rf:
             json.dump(dict_data, rf)
 

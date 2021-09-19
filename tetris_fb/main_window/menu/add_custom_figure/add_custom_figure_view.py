@@ -1,11 +1,10 @@
 from tetris_fb.main_window.utils import PATH_IMAGE_BACK_NEDDLE
 from ..game.shape import Shape
 from .draw_block import DrawBlockQFrame
-from .pressed_frame_controler import PressedFrameControled
+from .pressed_frame_controller import PressedFrameController
 
 from PySide6.QtWidgets import (QWidget, QGridLayout, QVBoxLayout,
-                               QHBoxLayout, QPushButton, QLabel
-                               )
+                               QHBoxLayout, QPushButton, QLabel, QColorDialog)
 from PySide6 import QtCore
 from PySide6.QtGui import QIcon
 
@@ -20,13 +19,13 @@ class CustomFigureAdderView(QWidget):
     SHIFT_X = 3
     SHIFT_Y = 3
 
-    def __init__(self, signal_controller):
+    def __init__(self, signalController):
         super().__init__()
 
-        self.signal_controller = signal_controller
+        self.signalController = signalController
 
-        self.signal_pressed_frames = PressedFrameControled()
-        self.signal_pressed_frames.sgn2adder[list].connect(self.take_clicked_frame)
+        self.signalPressedFrames = PressedFrameController()
+        self.signalPressedFrames.sgn2adder[list].connect(self.take_clicked_frame)
 
         self.initUI()
 
@@ -43,35 +42,43 @@ class CustomFigureAdderView(QWidget):
         hbox.addSpacing(3)
 
         # Create button which returns to the menu
-        self._button_back = QPushButton(QIcon(PATH_IMAGE_BACK_NEDDLE), "", self)
-        self._button_back.clicked.connect(self.signal_controller.back2menu)
-        hbox.addWidget(self._button_back, 0, QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
+        self._buttonBack = QPushButton(QIcon(PATH_IMAGE_BACK_NEDDLE), "", self)
+        self._buttonBack.clicked.connect(self.signalController.back2menu)
+        hbox.addWidget(self._buttonBack, 0, QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
 
         # Header of this widget
-        self._head_widget = QLabel("Add new figure")
-        hbox.addWidget(self._head_widget, 1, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+        self._headWidget = QLabel("Add new figure")
+        hbox.addWidget(self._headWidget, 1, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+
+        # Create button to choose color of new figure
+        self._pickColorButton = QPushButton('Pick color')
+        self._pickColorButton.clicked.connect(self.update_color_name)
+        hbox.addWidget(self._pickColorButton, 2, QtCore.Qt.AlignRight | QtCore.Qt.AlignTop)
 
         # Create button to save figure
-        self._save_figure_button = QPushButton('save')
-        self._save_figure_button.clicked.connect(self.save_figure_shape)
-        hbox.addWidget(self._save_figure_button, 2, QtCore.Qt.AlignRight | QtCore.Qt.AlignTop)
+        self._saveFigureButton = QPushButton('Save')
+        self._saveFigureButton.clicked.connect(self.save_figure_shape)
+        hbox.addWidget(self._saveFigureButton, 2, QtCore.Qt.AlignRight | QtCore.Qt.AlignTop)
 
         vbox.addLayout(hbox, 0)
 
         grid = QGridLayout()
         self._sheet = []
-        self._choose_figure = []
-        self._proposed_figures = []
-        self._saved_color = 'black'
+        self._choosenFigureList = []
+        self._proposedFiguresList = []
+        self._savedColor = 'black'
 
         for i in range(self.MAX_X):
             row = []
             for j in range(self.MAX_Y):
-                single = DrawBlockQFrame(self.signal_pressed_frames, j, i)
+                single = DrawBlockQFrame(self.signalPressedFrames, j, i)
                 if i == 3 and j == 3:
+                    # Button in the center - must be with blur color
+                    # Save figure - possible only if blue button also clicked
+                    # This magic stuff are made in order to simplify saving figure
                     single.COLOR_DEFAULT = 'blue'
                     single.default_color()
-                    self.center_sheet = single
+                    self.centerSheet = single
                 row.append(single)
                 grid.addWidget(single, i, j)
 
@@ -87,16 +94,20 @@ class CustomFigureAdderView(QWidget):
         Emit signal that menu should be switched to ADD NEW FIGURE widget
 
         """
-        self.signal_controller.sgn2stacked.emit(int(self.ADD_NEW_FIGURE))
+        self.signalController.sgn2stacked.emit(int(self.ADD_NEW_FIGURE))
+
+    def update_color_name(self):
+        self._savedColor = QColorDialog.getColor().name()
+        self.__draw_selected_buttons()
 
     def save_figure_shape(self):
-        if len(self._choose_figure) == self.MAXIMUM_SIZE and self.center_sheet.is_pressed():
+        if len(self._choosenFigureList) == self.MAXIMUM_SIZE and self.centerSheet.is_pressed():
             print('save')
             saved_figure = [
                 [single[0] - self.SHIFT_X, single[1] - self.SHIFT_Y]
-                for single in self._choose_figure
+                for single in self._choosenFigureList
             ]
-            Shape.write_figure_data(saved_figure, self._saved_color)
+            Shape.write_figure_data(saved_figure, self._savedColor)
 
     def __propose_direction(self, to_coordinates):
         propose_move_p = self.__check_figure_propose_move(
@@ -104,7 +115,7 @@ class CustomFigureAdderView(QWidget):
         )
         print('Propose direction: x: ', to_coordinates[0],' y: ', to_coordinates[1], ' is good: ', propose_move_p)
         if propose_move_p:
-            self._proposed_figures[-1].append(to_coordinates)
+            self._proposedFiguresList[-1].append(to_coordinates)
             self._sheet[to_coordinates[1]][to_coordinates[0]].propose_color()
 
     def __check_figure_propose_move(self, to_x, to_y):
@@ -118,15 +129,19 @@ class CustomFigureAdderView(QWidget):
         """
         return 0 <= x < self.MAX_X and 0 <= y < self.MAX_Y
 
+    def __draw_selected_buttons(self):
+        for y_c, x_c in self._choosenFigureList:
+            self._sheet[x_c][y_c].pressed_color(self._savedColor)
+
     def take_clicked_frame(self, coordinates):
 
-        if len(self._proposed_figures) > 0 and not self._sheet[coordinates[1]][coordinates[0]].is_proposed():
+        if len(self._proposedFiguresList) > 0 and not self._sheet[coordinates[1]][coordinates[0]].is_proposed():
             print('bad direction!')
             return
 
         # Draw proposed direction (where can move user)
-        if len(self._choose_figure) != 0:
-            self._proposed_figures.append([])
+        if len(self._choosenFigureList) != 0:
+            self._proposedFiguresList.append([])
             # Top direction
             propose_move = [coordinates[0], coordinates[1] - 1]
             self.__propose_direction(propose_move)
@@ -143,19 +158,19 @@ class CustomFigureAdderView(QWidget):
             propose_move = [coordinates[0] + 1, coordinates[1]]
             self.__propose_direction(propose_move)
 
-        if len(self._choose_figure) >= self.MAXIMUM_SIZE:
-            coord_del_figure = self._choose_figure.pop(0)
+        if len(self._choosenFigureList) >= self.MAXIMUM_SIZE:
+            coord_del_figure = self._choosenFigureList.pop(0)
             self._sheet[coord_del_figure[1]][coord_del_figure[0]].default_color()
             self._sheet[coord_del_figure[1]][coord_del_figure[0]].reset_statement()
 
         # Clear propose direction
-        if len(self._proposed_figures) > 1:
-            for single_prop in self._proposed_figures[0]:
+        if len(self._proposedFiguresList) > 1:
+            for single_prop in self._proposedFiguresList[0]:
                 self._sheet[single_prop[-1]][single_prop[0]].default_color()
                 self._sheet[single_prop[-1]][single_prop[0]].reset_statement()
-            self._proposed_figures.pop(0)
+            self._proposedFiguresList.pop(0)
 
-        self._choose_figure.append(coordinates[:2])
-        self._sheet[coordinates[1]][coordinates[0]].pressed_color()
+        self._choosenFigureList.append(coordinates[:2])
+        self.__draw_selected_buttons()
         print('x: ', coordinates[0], 'y: ', coordinates[1])
 

@@ -1,4 +1,4 @@
-from .pressed_frame_controler import PressedFrameControled
+from .pressed_frame_controller import PressedFrameController
 
 from PySide6.QtWidgets import QFrame
 from PySide6 import QtGui
@@ -7,17 +7,17 @@ from PySide6 import QtCore
 
 class DrawBlockQFrame(QFrame):
     COLOR_DEFAULT = '#F8F8FF'
-    COLOR_PRESSED = '#708090'
+    COLOR_PRESSED = '#708090' # TODO: Remove if it is no longer used
     COLOR_PROPOSE = '#90EE90'
     COLOR_LOOK_AT = '#87CEFA'
 
-    def __init__(self, signal_sender_pressed: PressedFrameControled, x: int, y: int):
+    def __init__(self, signalSenderPressed: PressedFrameController, x: int, y: int):
         """
         Create DrawBlockFrame for drawing new figures
 
         Parameters
         ----------
-        signal_sender_pressed : PressedFrameControled
+        signalSenderPressed : PressedFrameController
             Controller for emit signals to CustomFigureAdderView widget
         x : int
             Coordinate on X axis for this block
@@ -27,7 +27,7 @@ class DrawBlockQFrame(QFrame):
         """
         super().__init__()
 
-        self._signal_sender_pressed = signal_sender_pressed
+        self._signalSenderPressed = signalSenderPressed
         self._x = x
         self._y = y
         # Current statement for this frame
@@ -60,13 +60,13 @@ class DrawBlockQFrame(QFrame):
         self._is_proposed = True
         self.setStyleSheet('QFrame { background-color: %s }' % self.COLOR_PROPOSE)
 
-    def pressed_color(self):
+    def pressed_color(self, colorPressed: str):
         """
         Set pressed color and set block into pressed statement
 
         """
         self._is_pressed = True
-        self.setStyleSheet('QFrame { background-color: %s }' % self.COLOR_PRESSED)
+        self.setStyleSheet('QFrame { background-color: %s }' % colorPressed)
 
     def is_pressed(self):
         """
@@ -114,4 +114,4 @@ class DrawBlockQFrame(QFrame):
 
         """
         if event.button() == QtCore.Qt.MouseButton.RightButton:
-            self._signal_sender_pressed.sgn2adder.emit([self._x, self._y])
+            self._signalSenderPressed.sgn2adder.emit([self._x, self._y])

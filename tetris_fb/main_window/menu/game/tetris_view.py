@@ -11,10 +11,10 @@ class TetrisView(QWidget):
 
     GAME = 1
 
-    def __init__(self, signal_controller, status_bar):
+    def __init__(self, signalController, status_bar):
         super().__init__()
 
-        self.signal_controller = signal_controller
+        self.signalController = signalController
         self.statusBar = status_bar
         self.initUI()
     
@@ -27,22 +27,22 @@ class TetrisView(QWidget):
         hbox = QHBoxLayout()
 
         # Create button "back to the menu"
-        self._button_back = QPushButton(QIcon(PATH_IMAGE_BACK_NEDDLE), "", self)
-        self._button_back.clicked.connect(self.signal_controller.back2menu)
-        self._button_back.setFixedSize(60, 30)
-        vbox.addWidget(self._button_back, 0, QtCore.Qt.AlignTop)
+        self._buttonBack = QPushButton(QIcon(PATH_IMAGE_BACK_NEDDLE), "", self)
+        self._buttonBack.clicked.connect(self.signalController.back2menu)
+        self._buttonBack.setFixedSize(60, 30)
+        vbox.addWidget(self._buttonBack, 0, QtCore.Qt.AlignTop)
 
         self.tboard = Board(self)
 
         # Create button which restart game
-        self._restart_game = QPushButton(QIcon(PATH_IMAGE_RELOAD), "", self)
-        self._restart_game.clicked.connect(self.tboard.start)
-        self._restart_game.setFixedSize(60, 30)
-        vbox.addWidget(self._restart_game, 1, QtCore.Qt.AlignTop)
+        self._restartGame = QPushButton(QIcon(PATH_IMAGE_RELOAD), "", self)
+        self._restartGame.clicked.connect(self.tboard.start)
+        self._restartGame.setFixedSize(60, 30)
+        vbox.addWidget(self._restartGame, 1, QtCore.Qt.AlignTop)
 
         # Create label "Score"
-        self._label_score = QLabel("Game Score", self)
-        vbox.addWidget(self._label_score, 2, QtCore.Qt.AlignBottom)
+        self._labelScore = QLabel("Game Score", self)
+        vbox.addWidget(self._labelScore, 2, QtCore.Qt.AlignBottom)
 
         # Create score counter
         self._score = QLCDNumber(self)
@@ -59,5 +59,5 @@ class TetrisView(QWidget):
 
     def switcher(self):
         self.tboard.start()
-        self.signal_controller.sgn2stacked.emit(int(self.GAME))
+        self.signalController.sgn2stacked.emit(int(self.GAME))
 
