@@ -1,9 +1,9 @@
-from .control_widget import ControlWidget
+from .main_window_presenter import MainWindowPresenter
 
 from PySide6.QtWidgets import QMainWindow
 
 
-class MainWindow(QMainWindow):
+class MainWindowView(QMainWindow):
 
     WINDOW_SIZE = 'window_size'
 
@@ -19,15 +19,14 @@ class MainWindow(QMainWindow):
         """
         self.statusBar = self.statusBar()
 
-        self._control_widget = ControlWidget(self.statusBar)
-        self.setCentralWidget(self._control_widget)
+        self._controlWidget = MainWindowPresenter(self.statusBar)
+        self.setCentralWidget(self._controlWidget)
 
-        settings_widget = self._control_widget.get_settings()
+        settingsWidget = self._controlWidget.get_settings()
 
-        self.resize(*settings_widget.get_settings(self.WINDOW_SIZE))
+        self.resize(*settingsWidget.get_settings(self.WINDOW_SIZE))
         self.center()
         self.setWindowTitle("Main menu")
-        self.show()
     
     def center(self):
         """

@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (QVBoxLayout, QLabel, QFrame,
                                QPushButton, QWidget, QApplication)
 
 
-class MainMenu(QWidget):
+class MainMenuView(QWidget):
 
     def __init__(self):
         super().__init__()
@@ -21,14 +21,7 @@ class MainMenu(QWidget):
         """
         vbox = QVBoxLayout()
 
-        # Label with name of the game (i.e. Tetris in our case)
-        # TODO: Do dynamic text with paintEvent and drawText from QPainter
-        """
-        self._label_widget = QLabel("Tetris")
-        self._label_widget.setFont(QFont('Times', 20, QFont.Bold))
-        self._label_widget.setAlignment(Qt.AlignCenter)
-        """
-
+        # Label with name of the game (i.e. TetrisView in our case)
         self._label_widget = DanceText("Tetris", self)
         #self._label_widget.setMaximumHeight(50)
         self._label_widget.setFrameStyle(QFrame.Panel)
@@ -44,7 +37,6 @@ class MainMenu(QWidget):
         self._game_button.setPalette(pal)
         vbox.addWidget(self._game_button)
 
-
         # Create button and widget for settings
         self._settings_button = QPushButton("Settings")
         pal = self._settings_button.palette()
@@ -53,6 +45,12 @@ class MainMenu(QWidget):
         self._settings_button.setPalette(pal)
         vbox.addWidget(self._settings_button)
 
+        self._add_custom_figure_button = QPushButton("Add new figure")
+        pal = self._add_custom_figure_button.palette()
+        pal.setColor(QPalette.Button, QColor(Qt.green))
+        self._add_custom_figure_button.setAutoFillBackground(True)
+        self._add_custom_figure_button.setPalette(pal)
+        vbox.addWidget(self._add_custom_figure_button)
 
         # Create button and widget about_game
         self._about_game_button = QPushButton("About game")
@@ -96,4 +94,10 @@ class MainMenu(QWidget):
         """
         self._game_button.clicked.connect(connect_to)
 
-        
+    def connect_add_new_figure_button(self, connect_to):
+        """
+        Create event to show "Add new figure" widget, if a button was cliked
+
+        """
+        self._add_custom_figure_button.clicked.connect(connect_to)
+

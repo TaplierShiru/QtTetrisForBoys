@@ -1,2 +1,2 @@
 
-from .settings import Settings
+from .settings_view import SettingsView

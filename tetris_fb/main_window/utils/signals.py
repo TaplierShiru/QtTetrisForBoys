@@ -6,7 +6,7 @@ class SignalControl(QObject):
 
     sgn2stacked = Signal(int)
 
-    def back_to_menu(self):
+    def back2menu(self):
         """
         Return to start widget
         

@@ -1,49 +1,65 @@
-from .tetrominoe import Tetrominoe
+from tetris_fb.main_window.utils.constans import PATH_TO_FIGURES_DATA, COLOR, COORDS, PATH_TO_DEFAULT_DATA
+from .tetris_figures_enum import TetrisFiguresEnum
 import random
-
+import json
+import copy
 
 
 class Shape:
 
     # Different shapes of figures (see axis)
-    #              |
-    #    .(-1, 1)  |
-    #              |
-    #              |
-    #----.(-1, 0)--.(0, 0)------------------
-    #              |
-    #              |
-    #              .(0, -1)
-    #              |
-    TABLE_COORD = (
-        ((0, 0), (0, 0), (0, 0), (0, 0)),
-        ((0, -1), (0, 0), (-1, 0), (-1, 1)),
-        ((0, -1), (0, 0), (1, 0), (1, 1)),
-        ((0, -1), (0, 0), (0, 1), (0, 2)),
-        ((-1, 0), (0, 0), (1, 0), (0, 1)),
-        ((0, 0), (1, 0), (0, 1), (1, 1)),
-        ((-1, -1), (0, -1), (0, 0), (0, 1)),
-        ((1, -1), (0, -1), (0, 0), (0, 1))
-    )
+    #                      |
+    #        .(-1, 1)      |
+    #                      |
+    #                      |
+    #--------.(-1, 0)------.(0, 0)------------------
+    #                      |
+    #                      |
+    #                      .(0, -1)
+    #                      |
 
-    COLOR_TABLE = [
-        0x000000, 
-        0xCC6666, 
-        0x66CC66, 
-        0x6666CC,
-        0xCCCC66, 
-        0xCC66CC, 
-        0x66CCCC, 
-        0xDAAA00       
-    ]
+    @staticmethod
+    def read_default_figure_data():
+        with open(PATH_TO_DEFAULT_DATA) as fp:
+            data = fp.read()
+        return json.loads(data)
 
+    @staticmethod
+    def read_figure_data():
+        with open(PATH_TO_FIGURES_DATA) as fp:
+            data = fp.read()
+        return json.loads(data)
+
+    @staticmethod
+    def write_figure_data(shape_list: list, color: str):
+        current_data = Shape.read_figure_data()
+        current_data.update({
+            str(len(current_data)): {
+                COLOR: color,
+                COORDS: shape_list
+            }
+        })
+
+        with open(PATH_TO_FIGURES_DATA, 'w') as fp:
+            json.dump(current_data, fp)
+
+    @staticmethod
+    def reset_shape_file_to_default():
+        with open(PATH_TO_FIGURES_DATA, 'w') as fp:
+            json.dump(Shape.read_default_figure_data(), fp)
 
     def __init__(self):
+        data_js = self.read_figure_data()
 
-        self.coords = [[0, 0] for _ in range(4)]
-        self.pieceShape = Tetrominoe.NoShape
+        self.COLOR_TABLE = [data_js[name][COLOR] for name in data_js]
+        self.TABLE_COORD = [data_js[name][COORDS] for name in data_js]
+        self.number_of_figures = len(self.TABLE_COORD) - 1
 
-        self.set_shape(Tetrominoe.NoShape)
+        self.coords = None
+        self.length = 0
+        self.pieceShape = TetrisFiguresEnum.NoShape
+
+        self.set_shape(TetrisFiguresEnum.NoShape)
     
     def get_shape(self):
         """
@@ -58,11 +74,12 @@ class Shape:
         Set shape
 
         """
+        table = self.TABLE_COORD[new_shape]
+        # add custom size
 
-        table = Shape.TABLE_COORD[new_shape]
-        for i in range(4):
-            for j in range(2):
-                self.coords[i][j] = table[i][j]
+        self.coords = copy.deepcopy(table)
+        self.length = len(self.coords)
+
         self.pieceShape = new_shape
     
     def set_random_shape(self):
@@ -70,7 +87,7 @@ class Shape:
         Set random shape
 
         """
-        self.set_shape(random.randint(1, 7))
+        self.set_shape(random.randint(1, self.number_of_figures))
     
     def get_x(self, index):
         """
@@ -148,18 +165,17 @@ class Shape:
 
         """
 
-        if self.pieceShape == Tetrominoe.SquareShape:
+        if self.pieceShape == TetrisFiguresEnum.SquareShape:
             return self
 
         result = Shape()
-        result.pieceShape = self.pieceShape
+        result.set_shape(self.pieceShape)
 
-        for i in range(4):
-            result.set_x(i, self.get_y(i))
+        for i in range(result.length):
+            result.set_x(i,  self.get_y(i))
             result.set_y(i, -self.get_x(i))
 
         return result
-        
     
     def rotate_right(self):
         """
@@ -167,15 +183,14 @@ class Shape:
 
         """
 
-        if self.pieceShape == Tetrominoe.SquareShape:
+        if self.pieceShape == TetrisFiguresEnum.SquareShape:
             return self
 
         result = Shape()
-        result.pieceShape = self.pieceShape
+        result.set_shape(self.pieceShape)
 
-        for i in range(4):
+        for i in range(result.length):
             result.set_x(i, -self.get_y(i))
-            result.set_y(i, self.get_x(i))
+            result.set_y(i,  self.get_x(i))
 
-        return result     
-    
+        return result

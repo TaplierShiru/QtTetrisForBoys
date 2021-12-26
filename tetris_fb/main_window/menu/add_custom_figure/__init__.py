@@ -1,0 +1,2 @@
+
+from .add_custom_figure_view import CustomFigureAdderView

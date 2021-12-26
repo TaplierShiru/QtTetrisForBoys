@@ -1,3 +1,4 @@
+designer.lnk
 __pycache__
 .idea
 dataset
@@ -120,7 +121,7 @@ MANIFEST
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
-*.spec
+# *.spec Store spec for education purposes
 
 # Installer logs
 pip-log.txt

@@ -1,5 +1,5 @@
 from .shape import Shape
-from .tetrominoe import Tetrominoe
+from .tetris_figures_enum import TetrisFiguresEnum
 
 from PySide6.QtCore import Qt, QBasicTimer, Signal
 from PySide6.QtGui import QPainter, QColor, QBrush
@@ -16,8 +16,8 @@ class Board(QFrame):
     def __init__(self, parent, board_width=10, board_height=22, speed=100):
         super().__init__(parent)
 
-        self._board_width = board_width
-        self._board_height = board_height
+        self._boardWidth = board_width
+        self._boardHeight = board_height
         self._speed = speed
 
         self.initBoard()
@@ -47,7 +47,7 @@ class Board(QFrame):
         Datermines shape at the boards position
 
         """
-        return self.board[(y * self._board_width) + x]
+        return self.board[(y * self._boardWidth) + x]
     
     def set_shape_at(self, x, y, shape):
         """
@@ -55,7 +55,7 @@ class Board(QFrame):
 
         """
 
-        self.board[(y * self._board_width) + x] = shape
+        self.board[(y * self._boardWidth) + x] = shape
     
     def get_square_width(self):
         """
@@ -63,7 +63,7 @@ class Board(QFrame):
 
         """
 
-        return self.contentsRect().width() // self._board_width
+        return self.contentsRect().width() // self._boardWidth
     
     def get_square_height(self):
         """
@@ -71,7 +71,7 @@ class Board(QFrame):
 
         """
 
-        return self.contentsRect().height() // self._board_height
+        return self.contentsRect().height() // self._boardHeight
     
     def start(self):
         """
@@ -120,30 +120,30 @@ class Board(QFrame):
         painter = QPainter(self)
         rect = self.contentsRect()
         #painter.begin(self)
-        boardTop = rect.bottom() - self._board_height * self.get_square_height()
+        boardTop = rect.bottom() - self._boardHeight * self.get_square_height()
 
         self.drawGameBox(painter)
 
-        for i in range(self._board_height):
-            for j in range(self._board_width):
-                shape = self.shapeAt(j, self._board_height - i - 1)
+        for i in range(self._boardHeight):
+            for j in range(self._boardWidth):
+                shape = self.shapeAt(j, self._boardHeight - i - 1)
 
-                if shape != Tetrominoe.NoShape:
+                if shape != TetrisFiguresEnum.NoShape:
                     self.drawSquare(
                         painter, rect.left() + j * self.get_square_width(),
                         boardTop + i * self.get_square_height(),
                         shape
                     )
         
-        if self.curPiece.get_shape() != Tetrominoe.NoShape:
+        if self.curPiece.get_shape() != TetrisFiguresEnum.NoShape:
 
-            for i in range(4):
+            for i in range(self.curPiece.length):
                 x = self.curX + self.curPiece.get_x(i)
                 y = self.curY - self.curPiece.get_y(i)
                 self.drawSquare(
                     painter,
                     rect.left() + x * self.get_square_width(),
-                    boardTop + (self._board_height - y - 1) * self.get_square_height(),
+                    boardTop + (self._boardHeight - y - 1) * self.get_square_height(),
                     self.curPiece.get_shape()
                 )
         
@@ -155,7 +155,7 @@ class Board(QFrame):
 
         """
 
-        if not self.isStarted or self.curPiece.get_shape() == Tetrominoe.NoShape:
+        if not self.isStarted or self.curPiece.get_shape() == TetrisFiguresEnum.NoShape:
             super(Board, self).keyPressEvent(event)
             return
         
@@ -203,8 +203,8 @@ class Board(QFrame):
 
         """
         self.board.clear()
-        for _ in range(self._board_height * self._board_width):
-            self.board.append(Tetrominoe.NoShape)
+        for _ in range(self._boardHeight * self._boardWidth):
+            self.board.append(TetrisFiguresEnum.NoShape)
         
     def dropDown(self):
         """
@@ -239,7 +239,7 @@ class Board(QFrame):
 
         """
 
-        for i in range(4):
+        for i in range(self.curPiece.length):
 
             x = self.curX + self.curPiece.get_x(i)
             y = self.curY - self.curPiece.get_y(i)
@@ -259,11 +259,11 @@ class Board(QFrame):
         numFullLines = 0
         rowsToRemove = []
 
-        for i in range(self._board_height):
+        for i in range(self._boardHeight):
             n = 0
 
-            for j in range(self._board_width):
-                if not self.shapeAt(j, i) == Tetrominoe.NoShape:
+            for j in range(self._boardWidth):
+                if not self.shapeAt(j, i) == TetrisFiguresEnum.NoShape:
                     n += 1
             
             if n == 10:
@@ -273,8 +273,8 @@ class Board(QFrame):
 
         for m in rowsToRemove:
 
-            for k in range(m, self._board_height - 1):
-                for i in range(self._board_width):
+            for k in range(m, self._boardHeight - 1):
+                for i in range(self._boardWidth):
                     self.set_shape_at(i, k, self.shapeAt(i, k + 1))
         
         numFullLines += len(rowsToRemove)
@@ -284,7 +284,7 @@ class Board(QFrame):
             self.msg2StatusBar.emit(str(self.numLinesRemoved))
 
             self.isWaitingAfterLine = True
-            self.curPiece.set_shape(Tetrominoe.NoShape)
+            self.curPiece.set_shape(TetrisFiguresEnum.NoShape)
             self.update()
     
     def newPiece(self):
@@ -295,11 +295,11 @@ class Board(QFrame):
 
         self.curPiece = Shape()
         self.curPiece.set_random_shape()
-        self.curX = self._board_width // 2 + 1
-        self.curY = self._board_height - 1 + self.curPiece.min_y()
+        self.curX = self._boardWidth // 2 + 1
+        self.curY = self._boardHeight - 1 + self.curPiece.min_y()
 
         if not self.tryMove(self.curPiece, self.curX, self.curY):
-            self.curPiece.set_shape(Tetrominoe.NoShape)
+            self.curPiece.set_shape(TetrisFiguresEnum.NoShape)
             self.timer.stop()
             self.isStarted = False
             self.msg2StatusBar.emit("Game over!")
@@ -310,15 +310,15 @@ class Board(QFrame):
 
         """
 
-        for i in range(4):
+        for i in range(newPiece.length):
 
             x = newX + newPiece.get_x(i)
             y = newY - newPiece.get_y(i)
 
-            if x < 0 or x >= self._board_width or y < 0 or y >= self._board_height:
+            if x < 0 or x >= self._boardWidth or y < 0 or y >= self._boardHeight:
                 return False
             
-            if self.shapeAt(x, y) != Tetrominoe.NoShape:
+            if self.shapeAt(x, y) != TetrisFiguresEnum.NoShape:
                 return False
         
         self.curPiece = newPiece
@@ -335,7 +335,7 @@ class Board(QFrame):
 
         """
 
-        color = Shape.COLOR_TABLE
+        color = self.curPiece.COLOR_TABLE
 
         color = QColor(color[shape])
         painter.fillRect(
@@ -387,8 +387,3 @@ class Board(QFrame):
             0, rect.height() - 1,
             0, 0
         )
-        
-
-
-
-        
