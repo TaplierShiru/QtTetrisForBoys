@@ -1,4 +1,4 @@
-from main_window.utils.constans import PATH_TO_FIGURES_DATA, COLOR, COORDS, PATH_TO_DEFAULT_DATA
+from tetris_fb.main_window.utils.constans import PATH_TO_FIGURES_DATA, COLOR, COORDS, PATH_TO_DEFAULT_DATA
 from .tetris_figures_enum import TetrisFiguresEnum
 import random
 import json

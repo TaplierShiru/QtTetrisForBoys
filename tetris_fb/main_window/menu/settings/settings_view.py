@@ -12,8 +12,8 @@ class SettingsView(QWidget):
     SETTINGS = 2
     TRANSLATED = 'translated'
     VALUE = 'value'
-    SETTINGS_PATH = 'main_window/menu/settings/game_settings.json'
-    DEFAULT_SETTINGS_PATH = 'main_window/menu/settings/default_game_settings.json'
+    SETTINGS_PATH = 'config_data/game_settings.json'
+    DEFAULT_SETTINGS_PATH = 'config_data/default_game_settings.json'
 
     def __init__(self, signalController):
         super().__init__()
