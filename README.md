@@ -1,7 +1,7 @@
 ### QtTetrisForBoys
 
 This repo is simple Tetris application written with Qt framework. In my case, I wrote it for improve knowledge in Qt 
-framework. I hope you find it useful for your future code examples of just find it funny.
+framework. I hope you find it useful for your future code experience.
 
 ## Setup
 
